@@ -47,4 +47,19 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
         tokenIds += 1;
         _safeMint(msg.sender, tokenIds);
     } 
+
+    function setPaused(bool val) public onlyOwner {
+        _paused = val;
+    }
+
+    function withdraw() public onlyOwner {
+        address _owner = owner();
+        uint256 amount = address(this).balance;
+        (bool sent,) = _owner.call{value: amount}("");
+        require(sent, "Failed to send Ether");
+    }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 }
